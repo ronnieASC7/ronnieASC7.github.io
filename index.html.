@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ronnie Jacob Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Layout idea: a mission-control readout. Left-aligned copy, one live "triage field"
+   in the hero that sorts 2,000 tickets the way Ronnie did at Sompo; everything else quiet. */
+:root{
+  --void:#080D1C;      /* page */
+  --deck:#0F1630;      /* raised panels */
+  --grid:#1F2A4D;      /* hairlines, grid */
+  --ink:#E9EDF8;       /* text */
+  --dim:#8C98BA;       /* secondary text */
+  --plasma:#6FE3F0;    /* accent, links */
+  --signal:#FFB547;    /* priority / highlight */
+  --display:"Unbounded", "Arial Black", system-ui, sans-serif;
+  --body:"Instrument Sans", "Segoe UI", system-ui, sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{
+  margin:0;background:var(--void);color:var(--ink);font-family:var(--body);
+  font-size:17px;line-height:1.6;
+  background-image:
+    linear-gradient(var(--grid) 1px,transparent 1px),
+    linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:64px 64px;background-position:-1px -1px;
+  background-attachment:fixed;
+}
+body::before{ /* fades the grid toward the edges so text stays calm */
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(ellipse at 30% 20%,rgba(8,13,28,.55),rgba(8,13,28,.94) 70%);
+}
+a{color:var(--plasma);text-underline-offset:3px}
+a:focus-visible,button:focus-visible{outline:2px solid var(--signal);outline-offset:3px;border-radius:4px}
+.wrap{position:relative;z-index:1;max-width:1120px;margin:0 auto;padding:0 24px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.1}
+h2{font-size:clamp(1.6rem,3.2vw,2.2rem);font-weight:600;margin-bottom:28px}
+h3{font-size:1.05rem;font-weight:600;line-height:1.3}
+p{margin:0}
+.muted{color:var(--dim)}
+
+/* nav */
+nav{position:sticky;top:0;z-index:5;backdrop-filter:blur(10px);background:rgba(8,13,28,.72);border-bottom:1px solid var(--grid)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;height:60px}
+.mark{font-family:var(--display);font-weight:800;font-size:1rem;color:var(--ink);text-decoration:none;letter-spacing:.02em}
+nav ul{display:flex;gap:22px;list-style:none;margin:0;padding:0;flex-wrap:wrap}
+nav ul a{color:var(--dim);text-decoration:none;font-size:.95rem}
+nav ul a:hover{color:var(--ink)}
+@media (max-width:640px){nav ul{display:none}}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1.05fr 1fr;gap:48px;align-items:center;padding:72px 0 56px}
+.hero h1{font-size:clamp(2.6rem,6.4vw,5rem);font-weight:800;letter-spacing:-.01em}
+.hero .role{font-size:1.2rem;margin-top:18px;max-width:34ch}
+.status{display:inline-flex;align-items:center;gap:10px;margin-top:22px;padding:8px 14px;border:1px solid var(--grid);border-radius:999px;background:var(--deck);font-size:.92rem;color:var(--dim)}
+.status i{width:8px;height:8px;border-radius:50%;background:var(--signal);box-shadow:0 0 12px var(--signal)}
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}
+.btn{display:inline-block;padding:12px 20px;border-radius:10px;font-weight:600;text-decoration:none;border:1px solid var(--plasma);color:var(--void);background:var(--plasma)}
+.btn.ghost{background:transparent;color:var(--plasma)}
+.btn:hover{filter:brightness(1.1)}
+.field{position:relative;border:1px solid var(--grid);border-radius:18px;background:linear-gradient(160deg,var(--deck),var(--void));padding:18px 18px 16px;box-shadow:0 0 0 1px rgba(111,227,240,.06),0 30px 80px -30px rgba(111,227,240,.25)}
+.field canvas{display:block;width:100%;height:300px}
+.field figcaption{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:12px;font-size:.88rem;color:var(--dim)}
+.key{display:inline-flex;align-items:center;gap:6px}
+.key b{width:9px;height:9px;border-radius:2px;display:inline-block}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:22px}
+.stat strong{display:block;font-family:var(--display);font-size:1.6rem;font-weight:600;font-variant-numeric:tabular-nums;color:var(--ink)}
+.stat span{font-size:.86rem;color:var(--dim)}
+@media (max-width:860px){.hero{grid-template-columns:1fr;padding-top:48px}}
+
+section{padding:64px 0;border-top:1px solid var(--grid)}
+
+/* about */
+.about{display:grid;grid-template-columns:1fr 1fr;gap:40px}
+.about p{max-width:60ch}
+.about p+p{margin-top:14px}
+.facts{display:grid;gap:10px;align-content:start}
+.facts div{display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid var(--grid)}
+.facts dt{color:var(--dim)}
+.facts dd{margin:0;text-align:right}
+@media (max-width:860px){.about{grid-template-columns:1fr}}
+
+/* experience timeline */
+.timeline{list-style:none;margin:0;padding:0 0 0 26px;border-left:1px solid var(--grid);display:grid;gap:36px}
+.timeline li{position:relative}
+.timeline li::before{content:"";position:absolute;left:-32px;top:6px;width:11px;height:11px;border-radius:50%;background:var(--void);border:2px solid var(--plasma)}
+.timeline li.now::before{background:var(--signal);border-color:var(--signal);box-shadow:0 0 14px var(--signal)}
+.when{font-size:.9rem;color:var(--dim);font-variant-numeric:tabular-nums}
+.org{color:var(--plasma);font-weight:500}
+.timeline ul{margin:10px 0 0;padding-left:18px;max-width:72ch}
+.timeline ul li{margin-top:6px}
+.timeline ul li::before{display:none}
+.metric{color:var(--signal);font-weight:600;font-variant-numeric:tabular-nums}
+
+/* projects */
+.projects{display:grid;grid-template-columns:1.4fr 1fr;grid-template-rows:auto auto;gap:20px}
+.proj{border:1px solid var(--grid);border-radius:16px;padding:24px;background:var(--deck);display:flex;flex-direction:column;gap:12px}
+.proj.lead{grid-row:span 2;background:linear-gradient(170deg,#13204A,var(--deck) 60%)}
+.proj .tools{font-size:.88rem;color:var(--dim)}
+.proj ul{margin:0;padding-left:18px}
+.proj a.repo{margin-top:auto;font-weight:600;text-decoration:none}
+.proj a.repo:hover{text-decoration:underline}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:16px;border:1px solid var(--grid);border-radius:12px;background:rgba(8,13,28,.5)}
+.split ol,.split ul{margin:6px 0 0;padding-left:20px;font-family:var(--display);font-size:.95rem}
+.split ol li::marker{color:var(--plasma)}
+.split .loss li{color:#FF8A98}
+@media (max-width:860px){.projects{grid-template-columns:1fr}.proj.lead{grid-row:auto}}
+
+/* skills */
+.skills{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.skills h3{margin-bottom:14px;color:var(--dim);font-family:var(--body);font-size:.95rem;font-weight:600}
+.meter{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--grid)}
+.lvl{font-size:.82rem;padding:2px 10px;border-radius:999px;border:1px solid var(--grid);color:var(--dim);white-space:nowrap}
+.lvl.strong{border-color:var(--signal);color:var(--signal)}
+.lvl.working{border-color:var(--plasma);color:var(--plasma)}
+.domain{list-style:none;margin:0;padding:0}
+.domain li{padding:9px 0;border-bottom:1px solid var(--grid)}
+@media (max-width:860px){.skills{grid-template-columns:1fr}}
+
+/* education */
+.edu{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.card{border:1px solid var(--grid);border-radius:16px;padding:24px;background:var(--deck)}
+.card .when{margin-top:4px}
+.card p{margin-top:12px}
+.certs{list-style:none;margin:24px 0 0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.certs li{padding-top:14px;border-top:2px solid var(--plasma)}
+.certs small{display:block;color:var(--dim)}
+@media (max-width:860px){.edu,.certs{grid-template-columns:1fr}}
+
+/* contact */
+.contact{display:grid;grid-template-columns:1.2fr 1fr;gap:40px;align-items:end}
+.contact h2{font-size:clamp(2rem,4.6vw,3.4rem);font-weight:800;margin:0}
+.links{display:grid;gap:12px}
+.links a,.links p{display:flex;justify-content:space-between;gap:16px;padding:14px 18px;border:1px solid var(--grid);border-radius:12px;background:var(--deck);text-decoration:none;color:var(--ink);overflow-wrap:anywhere}
+.links a:hover{border-color:var(--plasma)}
+.links span{color:var(--dim)}
+.copy{font:inherit;cursor:pointer;background:none;border:0;color:var(--plasma);padding:0}
+@media (max-width:860px){.contact{grid-template-columns:1fr}}
+footer{padding:28px 0 40px;color:var(--dim);font-size:.88rem}
+</style>
+</head>
+<body>
+
+<nav aria-label="Sections">
+  <div class="wrap">
+    <a class="mark" href="#top">RJ</a>
+    <ul>
+      <li><a href="#about">About</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="wrap" id="top">
+
+  <header class="hero">
+    <div>
+      <h1>Ronnie Jacob</h1>
+      <p class="role">Business and data analyst who turns messy operational data into clear priorities.</p>
+      <p class="status"><i aria-hidden="true"></i>Open to full-time roles from May 2027 and internships now</p>
+      <div class="actions">
+        <a class="btn" href="#contact">Get in touch</a>
+        <a class="btn ghost" href="https://github.com/ronnieASC7">View GitHub</a>
+      </div>
+      <div class="stats">
+        <div class="stat"><strong>M.S.</strong><span>Data Analytics, Stony Brook, 2027</span></div>
+        <div class="stat"><strong>3.46</strong><span>GPA, B.S. Cum Laude</span></div>
+        <div class="stat"><strong>2</strong><span>regulated-industry internships</span></div>
+      </div>
+    </div>
+
+    <figure class="field" style="margin:0">
+      <canvas id="triage" role="img" aria-label="Animation of about 2,000 support tickets being sorted by importance, with the top 600 highlighted"></canvas>
+      <figcaption>
+        <span>Sompo International, 2024: ~2,000 P&amp;C support tickets ranked by client impact</span>
+        <span><span class="key"><b style="background:var(--signal)"></b>Top 600 flagged</span>&nbsp;&nbsp;<span class="key"><b style="background:#3A4A78"></b>Secondary</span></span>
+      </figcaption>
+    </figure>
+  </header>
+
+  <section id="about" aria-labelledby="about-h">
+    <h2 id="about-h">About</h2>
+    <div class="about">
+      <div>
+        <p>I'm finishing an M.S. in Data Analytics at Stony Brook University after a B.S. in Business Administration from the University at Albany, with a dual concentration in finance and business analytics.</p>
+        <p>My internships were in two regulated industries. At a broker-dealer I verified account transfers against regulatory standards. At a specialty insurer I ranked a backlog of support tickets so IT could fix what mattered most to clients first.</p>
+        <p>I like analyst work that sits between the data and the people who use it: building the dashboard, then explaining what it means to the team or the client.</p>
+      </div>
+      <dl class="facts">
+        <div><dt>Based in</dt><dd>New York metro</dd></div>
+        <div><dt>Open to</dt><dd>Remote, hybrid, on-site; relocation in the US</dd></div>
+        <div><dt>Looking for</dt><dd>Business, data, operations or consulting analyst roles</dd></div>
+        <div><dt>Work authorization</dt><dd>US citizen</dd></div>
+        <div><dt>Languages</dt><dd>English (native), Malayalam (fluent)</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section id="experience" aria-labelledby="exp-h">
+    <h2 id="exp-h">Experience</h2>
+    <ol class="timeline">
+      <li>
+        <p class="when">Aug 2024 to Nov 2024 · Albany, NY</p>
+        <h3>Operations Intern <span class="org">Purshe Kaplan Sterling Investments</span></h3>
+        <ul>
+          <li>Verified about <span class="metric">50 dealer changeover forms a day</span>, transferring account ownership between brokers and dealers and confirming each met regulatory standards.</li>
+          <li>Tracked submissions in Salesforce and internal financial software, cutting processing errors and giving the team a reliable view of status.</li>
+          <li>Worked with legal and compliance on every change and kept clients updated until each one closed.</li>
+        </ul>
+      </li>
+      <li>
+        <p class="when">Jun 2024 to Aug 2024 · Purchase, NY</p>
+        <h3>Operations Analyst Intern <span class="org">Sompo International</span></h3>
+        <ul>
+          <li>Analyzed about <span class="metric">2,000 Guidewire support tickets</span> for the Property &amp; Casualty business in Excel, ranking client issues from most to least important.</li>
+          <li>Flagged the <span class="metric">top 600</span> for advancement and classified the rest as secondary, so IT worked by client impact instead of arrival order.</li>
+          <li>Prepared reports and presentations for management, applying insurance regulatory compliance requirements.</li>
+        </ul>
+      </li>
+      <li class="now">
+        <p class="when">May 2022 to now · Yonkers, Albany and Stony Brook, NY</p>
+        <h3>Sales Associate, part-time <span class="org">CVS Pharmacy</span></h3>
+        <ul>
+          <li>Monitor front-store inventory and service metrics, flagging shortages early, and help management merchandise new product launches.</li>
+          <li>Held for <span class="metric">4+ years</span> alongside full-time study, transferring stores as I moved for school.</li>
+        </ul>
+      </li>
+    </ol>
+  </section>
+
+  <section id="projects" aria-labelledby="proj-h">
+    <h2 id="proj-h">Projects</h2>
+    <div class="projects">
+      <article class="proj lead">
+        <h3>Food Delivery Profitability Analysis</h3>
+        <p class="tools">Tableau · Excel · Stony Brook coursework, 2026</p>
+        <p>Where do revenue and profit actually come from across six New York and New Jersey markets? Profit by restaurant type, with losses in a diverging color:</p>
+        <div class="split">
+          <div><p class="tools">Most profitable</p><ol><li>Italian</li><li>Chinese</li><li>Sushi</li></ol></div>
+          <div class="loss"><p class="tools">Losing money</p><ul><li>Burgers</li><li>Desserts</li><li>Coffee &amp; tea</li></ul></div>
+        </div>
+        <ul>
+          <li>Asian cuisine led revenue, followed by Mediterranean.</li>
+          <li>Brooklyn led profit and Long Island trailed; individual customers drove four of six markets.</li>
+          <li>Percent-of-total calculations compared delivery and pickup mix across markets of different sizes.</li>
+        </ul>
+        <a class="repo" href="https://github.com/ronnieASC7/food-delivery">Open the repository</a>
+      </article>
+
+      <article class="proj">
+        <h3>Sales Performance Analysis</h3>
+        <p class="tools">Tableau · Excel · 2026</p>
+        <p>Ranked profit by region, isolated the 10 best-selling products with a Top-N filter, and compared product lines in the order the business prioritizes them. Every chart title states its finding.</p>
+        <a class="repo" href="https://github.com/ronnieASC7/sales-data-">Open the repository</a>
+      </article>
+
+      <article class="proj">
+        <h3>Mobile Phone Price-Tier Classification</h3>
+        <p class="tools">Python · pandas · scikit-learn · 2026</p>
+        <p>A decision tree that sorts 2,000 phones into four price tiers from 20 hardware specs. <span class="metric">84.5%</span> test accuracy and <span class="metric">85%</span> mean cross-validation accuracy; RAM was the strongest predictor.</p>
+        <a class="repo" href="https://github.com/ronnieASC7/mini-project">Open the repository</a>
+      </article>
+    </div>
+  </section>
+
+  <section id="skills" aria-labelledby="skills-h">
+    <h2 id="skills-h">Skills</h2>
+    <div class="skills">
+      <div>
+        <h3>Data tools</h3>
+        <div class="meter"><span>Excel</span><span class="lvl strong">Strong</span></div>
+        <div class="meter"><span>Tableau</span><span class="lvl strong">Strong</span></div>
+        <div class="meter"><span>SQL</span><span class="lvl working">Working</span></div>
+        <div class="meter"><span>Python (pandas, NumPy)</span><span class="lvl working">Working</span></div>
+        <div class="meter"><span>Microsoft Access</span><span class="lvl working">Working</span></div>
+      </div>
+      <div>
+        <h3>Business systems</h3>
+        <div class="meter"><span>Salesforce</span><span class="lvl working">Working</span></div>
+        <div class="meter"><span>Mendix (low-code)</span><span class="lvl working">Working</span></div>
+        <div class="meter"><span>Guidewire</span><span class="lvl">Used at Sompo</span></div>
+        <div class="meter"><span>PowerPoint</span><span class="lvl">Used at work</span></div>
+      </div>
+      <div>
+        <h3>Domain knowledge</h3>
+        <ul class="domain">
+          <li>Financial analysis</li>
+          <li>Broker-dealer operations and compliance</li>
+          <li>Property &amp; casualty insurance operations</li>
+          <li>Decision modeling and optimization</li>
+          <li>Database design</li>
+          <li>Presenting findings to management</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="education" aria-labelledby="edu-h">
+    <h2 id="edu-h">Education</h2>
+    <div class="edu">
+      <div class="card">
+        <h3>M.S. Data Analytics</h3>
+        <p class="org" style="margin-top:6px">Stony Brook University</p>
+        <p class="when">Aug 2026 to May 2027 (expected)</p>
+        <p>Data visualization and storytelling, statistical foundations, decision modeling, big data and AI foundations, database management.</p>
+      </div>
+      <div class="card">
+        <h3>B.S. Business Administration</h3>
+        <p class="org" style="margin-top:6px">University at Albany, SUNY</p>
+        <p class="when">Aug 2022 to May 2026</p>
+        <p>Finance and business analytics, minor in economics. GPA 3.46, Cum Laude, Dean's List.</p>
+      </div>
+    </div>
+    <ul class="certs">
+      <li>PwC Management Consulting Job Simulation<small>Forage, 2026</small></li>
+      <li>Foundations of Business Intelligence<small>Google, 2024</small></li>
+      <li>Foundations of Digital Marketing and E-commerce<small>Google, 2024</small></li>
+    </ul>
+  </section>
+
+  <section id="contact" aria-labelledby="contact-h">
+    <div class="contact">
+      <div>
+        <h2 id="contact-h">Let's talk about your team's data.</h2>
+        <p class="muted" style="margin-top:16px;max-width:46ch">Email is the fastest way to reach me.</p>
+      </div>
+      <div class="links">
+        <p><span>Email</span><span style="color:var(--ink)">ronniejacob77@gmail.com</span> <button class="copy" id="copy" type="button">Copy</button></p>
+        <a href="https://www.linkedin.com/in/ronnie-jacob-bb05871b4"><span>LinkedIn</span>linkedin.com/in/ronnie-jacob-bb05871b4</a>
+        <a href="https://github.com/ronnieASC7"><span>GitHub</span>github.com/ronnieASC7</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="wrap">© 2026 Ronnie Jacob · New York</footer>
+
+<script>
+(() => {
+  // Copy email
+  const btn = document.getElementById('copy');
+  btn.addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText('ronniejacob77@gmail.com'); btn.textContent = 'Copied'; }
+    catch (e) { btn.textContent = 'Select the address to copy'; }
+    setTimeout(() => (btn.textContent = 'Copy'), 2200);
+  });
+
+  // Triage field: ~2,000 tickets drift in, then sort into rank order; top 600 light up.
+  const cv = document.getElementById('triage');
+  const ctx = cv.getContext('2d');
+  const N = 2000, TOP = 600;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let W, H, dpr, pts = [], t0 = null;
+
+  // Deterministic pseudo-random so every visit looks the same
+  let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  for (let i = 0; i < N; i++) pts.push({ sx: rnd(), sy: rnd(), score: rnd(), rank: 0 });
+  pts.slice().sort((a, b) => b.score - a.score).forEach((p, i) => (p.rank = i));
+
+  function layout() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = cv.clientWidth; H = cv.clientHeight;
+    cv.width = W * dpr; cv.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const cols = Math.round(Math.sqrt(N * W / H));
+    const rows = Math.ceil(N / cols);
+    const cw = W / cols, ch = H / rows;
+    for (const p of pts) {
+      p.tx = (p.rank % cols) * cw + cw / 2;
+      p.ty = Math.floor(p.rank / cols) * ch + ch / 2;
+      p.r = Math.max(1.2, Math.min(cw, ch) * 0.32);
+    }
+  }
+  const ease = x => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
+
+  function draw(k) {
+    ctx.clearRect(0, 0, W, H);
+    for (const p of pts) {
+      const d = Math.min(1, Math.max(0, k * 1.35 - (p.rank / N) * 0.35)); // staggered by rank
+      const e = ease(d);
+      const x = p.sx * W + (p.tx - p.sx * W) * e;
+      const y = p.sy * H + (p.ty - p.sy * H) * e;
+      const hot = p.rank < TOP && e > 0.6;
+      ctx.fillStyle = hot ? '#FFB547' : (e > 0.98 ? '#3A4A78' : '#6FE3F0');
+      ctx.globalAlpha = hot ? 1 : 0.75;
+      ctx.beginPath(); ctx.arc(x, y, p.r, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  function frame(ts) {
+    if (t0 === null) t0 = ts;
+    const k = Math.min(1, (ts - t0 - 400) / 2600);
+    draw(Math.max(0, k));
+    if (k < 1) requestAnimationFrame(frame);
+  }
+
+  layout();
+  if (reduce) draw(1); else { draw(0); requestAnimationFrame(frame); }
+  let rt; window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => { layout(); draw(1); }, 120); });
+})();
+</script>
+</body>
+</html>
